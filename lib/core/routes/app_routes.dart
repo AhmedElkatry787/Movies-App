@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/modules/login/login_screen.dart';
 import 'package:movies_app/modules/onBoarding/onboarding_screen.dart';
 import 'package:movies_app/modules/splash/splash_view.dart';
 
@@ -9,6 +10,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     AppRoutesName.splash: (_) => const SplashView(),
     AppRoutesName.onBoarding: (_) => const OnBoardingScreen(),
+    AppRoutesName.login : (_) => const LoginScreen(),
     AppRoutesName.home: (_) => const HomeView(),
   };
 }

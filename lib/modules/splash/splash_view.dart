@@ -21,13 +21,13 @@ class _SplashViewState extends State<SplashView> {
   }
 
   /// Onboarding is only shown on the first launch; afterwards the splash
-  /// goes straight to home.
+  /// goes straight to login.
   Future<void> _goToNextScreen() async {
     final seenOnBoarding = await AppPrefs.isOnBoardingSeen();
     if (!mounted) return;
     Navigator.pushReplacementNamed(
       context,
-      seenOnBoarding ? AppRoutesName.home : AppRoutesName.onBoarding,
+      seenOnBoarding ? AppRoutesName.login : AppRoutesName.onBoarding,
     );
   }
 

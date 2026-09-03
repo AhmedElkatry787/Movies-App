@@ -54,7 +54,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           'Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.',
       imageHeightFactor: 752 / kDesignFrameHeight,
       imageTopOffset: -11,
-      overlayColor: const Color(0xFF601321),
+      overlayColor:  Color(0xFF601321),
     ),
     OnBoardingModel(
       image: 'assets/images/onboarding6.png',
@@ -62,7 +62,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       description:
           'Your movie journey starts here. Browse, save and enjoy thousands of films whenever you want.',
       imageHeightFactor: 680 / kDesignFrameHeight,
-      overlayColor: const Color(0xFF2A2C30),
+      overlayColor:  Color(0xFF2A2C30),
     ),
   ];
 
@@ -83,7 +83,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Future<void> _finish() async {
     await AppPrefs.setOnBoardingSeen();
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, AppRoutesName.home);
+    Navigator.pushReplacementNamed(context, AppRoutesName.login);
   }
 
   @override
