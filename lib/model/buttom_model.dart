@@ -1,54 +1,59 @@
 import 'package:flutter/material.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  final String hintText;
-  final TextEditingController? controller;
-  final Color borderColor;
-  final Color fillColor;
-  final Color hintColor;
+class CustomButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final double? width;
+  final double height;
+  final Color backgroundColor;
   final Color textColor;
   final double borderRadius;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final Widget? child;
 
-  const CustomTextFormField({
+  const CustomButton({
     super.key,
-    required this.hintText,
-    this.controller,
-    this.borderColor = Colors.white,
-    this.fillColor = Colors.transparent,
-    this.hintColor = Colors.grey,
-    this.textColor = Colors.white,
+    required this.text,
+    required this.onPressed,
+    this.width,
+    this.height = 50,
+    this.backgroundColor = const Color(0xffFFC107),
+    this.textColor = Colors.black,
     this.borderRadius = 8,
+    this.fontSize = 20,
+    this.fontWeight = FontWeight.w600,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      style: TextStyle(
-        color: textColor,
-      ),
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: hintColor,
-        ),
-        filled: true,
-        fillColor: fillColor,
-
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: borderColor,
+    return SizedBox(
+      width: width ?? double.infinity,
+      height: height,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
-
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: borderColor,
-            width: 2,
-          ),
-        ),
+        child: child ??
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                color: textColor,
+                letterSpacing: 0,
+                height: 1.0,
+              ),
+            ),
       ),
     );
   }

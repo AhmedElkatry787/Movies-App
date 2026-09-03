@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/modules/splash/splash_view.dart';
 import 'package:movies_app/core/routes/app_routes.dart';
 import 'package:movies_app/core/routes/app_routes_name.dart';
 
@@ -13,6 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
+
+      theme: ThemeData(
+        fontFamily: 'Inter',
+      ),
 
       initialRoute: AppRoutesName.splash,
 
