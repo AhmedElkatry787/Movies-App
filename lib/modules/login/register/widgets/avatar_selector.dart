@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class AvatarSelector extends StatefulWidget {
   final Function(int index) onAvatarSelected;
@@ -12,7 +11,7 @@ class AvatarSelector extends StatefulWidget {
 class _AvatarSelectorState extends State<AvatarSelector> {
   int centerIndex = 0;
   final List<String> avatars =
-  List.generate(9, (i) => 'assets/icons/p${i + 1}.svg');
+  List.generate(9, (i) => 'assets/images/p${i + 1}.png');
 
   void _select(int newCenter) {
     setState(() {
@@ -32,15 +31,15 @@ class _AvatarSelectorState extends State<AvatarSelector> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _avatarCircle(index: leftIndex, size: 75, onTap: () => _select(leftIndex)),
-            _avatarCircle(index: centerIndex, size: 125, isSelected: true, onTap: () {}),
-            _avatarCircle(index: rightIndex, size: 75, onTap: () => _select(rightIndex)),
+            _avatarCircle(index: leftIndex, size: 95, onTap: () => _select(leftIndex)),
+            _avatarCircle(index: centerIndex, size: 150, isSelected: true, onTap: () {}),
+            _avatarCircle(index: rightIndex, size: 95, onTap: () => _select(rightIndex)),
           ],
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 10),
         const Text(
           'Avatar',
-          style: TextStyle(color: Colors.white, fontSize: 12),
+          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
         ),
       ],
     );
@@ -60,11 +59,8 @@ class _AvatarSelectorState extends State<AvatarSelector> {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: isSelected
-              ? Border.all(color: const Color(0xff9C35FF), width: 3)
-              : null,
         ),
-        child: SvgPicture.asset(avatars[index], fit: BoxFit.cover),
+        child: Image.asset(avatars[index], fit: BoxFit.cover),
       ),
     );
   }
