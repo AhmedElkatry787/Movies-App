@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/routes/app_routes_name.dart';
 
-import '../../core/app_colors/app_colors.dart';
-import '../../model/buttom_model.dart';
-import '../../model/textfromfield_model.dart';
+import '../../../core/app_colors/app_colors.dart';
+import '../../../model/buttom_model.dart';
+import '../../../model/textfromfield_model.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -81,7 +82,9 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutesName.register);
+                      },
                       child: Text(
                         'Sign Up',
                         textAlign: TextAlign.left,
