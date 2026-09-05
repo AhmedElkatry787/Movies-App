@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/model/buttom_model.dart';
 import 'package:movies_app/model/textfromfield_model.dart';
 import 'package:movies_app/modules/login/register/widgets/avatar_selector.dart';
-
 import '../../../core/app_colors/app_colors.dart';
+import '../../../model/lang_selector.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -125,6 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 20),
+            LanguageSelector(),
           ],
         ),
       ),

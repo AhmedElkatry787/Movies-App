@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/cache/app_prefs.dart';
 import 'package:movies_app/core/routes/app_routes_name.dart';
-
 import '../../core/app_colors/app_colors.dart';
 
 class SplashView extends StatefulWidget {
@@ -20,8 +18,6 @@ class _SplashViewState extends State<SplashView> {
     Timer(const Duration(seconds: 3), _goToNextScreen);
   }
 
-  /// Onboarding is only shown on the first launch; afterwards the splash
-  /// goes straight to login.
   Future<void> _goToNextScreen() async {
     final seenOnBoarding = await AppPrefs.isOnBoardingSeen();
     if (!mounted) return;

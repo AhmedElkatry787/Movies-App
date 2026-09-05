@@ -3,6 +3,7 @@ import 'package:movies_app/modules/login/login/login_screen.dart';
 import 'package:movies_app/modules/onBoarding/onboarding_screen.dart';
 import 'package:movies_app/modules/splash/splash_view.dart';
 import '../../modules/home/home_view.dart';
+import '../../modules/login/forget_password/forget_password.dart';
 import '../../modules/login/register/register_screen.dart';
 import 'app_routes_name.dart';
 
@@ -12,6 +13,7 @@ class AppRoutes {
     AppRoutesName.onBoarding: (_) => const OnBoardingScreen(),
     AppRoutesName.login : (_) => const LoginScreen(),
     AppRoutesName.register : (_) => const RegisterScreen(),
+    AppRoutesName.forgetPassword: (_) => const ForgetPassword(),
     AppRoutesName.home: (_) => const HomeView(),
   };
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/routes/app_routes_name.dart';
+import 'package:movies_app/model/lang_selector.dart';
 
 import '../../../core/app_colors/app_colors.dart';
 import '../../../model/buttom_model.dart';
@@ -50,7 +51,9 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutesName.forgetPassword);
+                      },
                       child: Text(
                         'Forgot Password?',
                         textAlign: TextAlign.left,
@@ -114,7 +117,9 @@ class LoginScreen extends StatelessWidget {
                   svgIcon: 'assets/icons/google.svg',
                     text: 'Continue with Google',
                     onPressed: (){},
-                )
+                ),
+                SizedBox(height: 25),
+                LanguageSelector(),
               ],
             ),
           ),
