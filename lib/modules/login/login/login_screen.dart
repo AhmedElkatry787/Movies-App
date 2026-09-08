@@ -8,7 +8,6 @@ import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
 import '../../../model/buttom_model.dart';
 import '../../../model/textfromfield_model.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../auth/presentation/manager/auth_event.dart';
 
 
