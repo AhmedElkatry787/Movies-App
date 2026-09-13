@@ -41,3 +41,11 @@ class ForgetPasswordRequested extends AuthEvent {
   @override
   List<Object?> get props => [email];
 }
+
+class CurrentUserRequested extends AuthEvent {
+  const CurrentUserRequested();
+}
+
+class LogoutRequested extends AuthEvent {
+  const LogoutRequested();
+}

@@ -6,7 +6,9 @@ import '../../data Source/repositories/auth_remote_data_source.dart';
 import '../../domain/usecases/forget_password_usecase.dart';
 import '../../domain/usecases/login_google_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
+import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
+import '../../domain/usecases/get_current_user_usecase.dart';
 import 'auth_bloc.dart';
 
 AuthBloc buildAuthBloc() {
@@ -22,6 +24,8 @@ AuthBloc buildAuthBloc() {
     loginUseCase: LoginUseCase(repository),
     registerUseCase: RegisterUseCase(repository),
     googleSignInUseCase: GoogleSignInUseCase(repository),
+    getCurrentUserUseCase: GetCurrentUserUseCase(repository),
     forgetPasswordUseCase: ForgetPasswordUseCase(repository),
+    logoutUseCase: LogoutUseCase(repository),
   );
 }

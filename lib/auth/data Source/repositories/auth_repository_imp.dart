@@ -66,6 +66,26 @@ class AuthRepositoryImpl implements AuthRepository {
       throw ServerException(e.toString());
     }
   }
+  @override
+  Future<void> logout() async {
+    try {
+      await remoteDataSource.logout();
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+  @override
+  Future<UserEntity> getCurrentUser() async {
+    try {
+      return await remoteDataSource.getCurrentUser();
+    } on fb.FirebaseAuthException catch (e) {
+      throw ServerException(_mapAuthError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+
 
   String _mapAuthError(fb.FirebaseAuthException e) {
     switch (e.code) {
@@ -80,10 +100,13 @@ class AuthRepositoryImpl implements AuthRepository {
         return 'كلمة المرور ضعيفة جدًا (لازم 6 حروف على الأقل)';
       case 'invalid-email':
         return 'صيغة الإيميل غير صحيحة';
+      case 'no-current-user':
+        return 'لا يوجد مستخدم مسجل دخول حاليًا';
       case 'sign_in_cancelled':
         return e.message ?? 'تم إلغاء العملية';
       default:
         return e.message ?? 'حدث خطأ غير متوقع';
+
     }
   }
 }

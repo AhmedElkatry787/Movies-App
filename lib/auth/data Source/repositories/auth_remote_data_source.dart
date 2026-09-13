@@ -16,6 +16,8 @@ abstract class AuthRemoteDataSource {
   });
   Future<UserModel> signInWithGoogle();
   Future<void> forgetPassword({required String email});
+  Future<UserModel> getCurrentUser();
+  Future<void> logout();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -117,6 +119,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> forgetPassword({required String email}) {
     return firebaseAuth.sendPasswordResetEmail(email: email);
   }
+  @override
+  Future<UserModel> getCurrentUser() async {
+    final user = firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw fb.FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'لا يوجد مستخدم مسجل دخول حاليًا',
+      );
+    }
+
+    return _fetchProfile(user);
+  }
+
+  @override
+  Future<void> logout() async {
+    await googleSignIn.signOut();
+    await firebaseAuth.signOut();
+  }
+
 
   Future<UserModel> _fetchProfile(fb.User user) async {
     try {
@@ -132,3 +154,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return UserModel(id: user.uid, name: user.displayName ?? '', email: user.email ?? '');
   }
 }
+
