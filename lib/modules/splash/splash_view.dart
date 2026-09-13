@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movies_app/core/cache/app_prefs.dart';
 import 'package:movies_app/core/routes/app_routes_name.dart';
 import '../../core/app_colors/app_colors.dart';
@@ -19,6 +20,13 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _goToNextScreen() async {
+    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+    if (isLoggedIn) {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutesName.home);
+      return;
+    }
+
     final seenOnBoarding = await AppPrefs.isOnBoardingSeen();
     if (!mounted) return;
     Navigator.pushReplacementNamed(
@@ -31,9 +39,7 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
-      body: Center(
-        child: Image.asset('assets/images/splashimg.png'),
-      ),
+      body: Center(child: Image.asset('assets/images/splashimg.png')),
     );
   }
 }

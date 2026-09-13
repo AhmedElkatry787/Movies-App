@@ -76,7 +76,12 @@ class _RegisterViewState extends State<_RegisterView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          Navigator.pushNamedAndRemoveUntil(context, AppRoutesName.home, (route) => false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('تم إنشاء الحساب بنجاح، سجّل دخولك الآن')),
+          );
+          Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutesName.login, (route) => false,
+          );
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
         }

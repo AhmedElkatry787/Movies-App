@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../domain/entities/user_model.dart';
 
@@ -18,6 +19,9 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+
+  static const Duration _profileWriteTimeout = Duration(seconds: 10);
+
   final fb.FirebaseAuth firebaseAuth;
   final FirebaseFirestore firestore;
   final GoogleSignIn googleSignIn;
@@ -50,7 +54,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       password: password,
     );
     final user = credential.user!;
-    await user.updateDisplayName(name);
 
     final model = UserModel(
       id: user.uid,
@@ -59,7 +62,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       phone: phone,
       avatarIndex: avatarIndex,
     );
-    await firestore.collection('users').doc(user.uid).set(model.toMap());
+
+    try {
+      await user.updateDisplayName(name).timeout(_profileWriteTimeout);
+      await firestore
+          .collection('users')
+          .doc(user.uid)
+          .set(model.toMap())
+          .timeout(_profileWriteTimeout);
+    } catch (e) {
+      debugPrint('register: could not save the user profile -> $e');
+    }
+
+
+    await firebaseAuth.signOut();
     return model;
   }
 
@@ -80,15 +96,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final userCredential = await firebaseAuth.signInWithCredential(credential);
     final user = userCredential.user!;
 
-    final doc = await firestore.collection('users').doc(user.uid).get();
-    if (doc.exists) return UserModel.fromMap(doc.data()!);
-
     final model = UserModel(
       id: user.uid,
       name: user.displayName ?? '',
       email: user.email ?? '',
     );
-    await firestore.collection('users').doc(user.uid).set(model.toMap());
+
+    try {
+      final docRef = firestore.collection('users').doc(user.uid);
+      final doc = await docRef.get().timeout(_profileWriteTimeout);
+      if (doc.exists) return UserModel.fromMap(doc.data()!);
+      await docRef.set(model.toMap()).timeout(_profileWriteTimeout);
+    } catch (e) {
+      debugPrint('google sign-in: could not sync the user profile -> $e');
+    }
     return model;
   }
 
@@ -98,8 +119,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   Future<UserModel> _fetchProfile(fb.User user) async {
-    final doc = await firestore.collection('users').doc(user.uid).get();
-    if (doc.exists) return UserModel.fromMap(doc.data()!);
+    try {
+      final doc = await firestore
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .timeout(_profileWriteTimeout);
+      if (doc.exists) return UserModel.fromMap(doc.data()!);
+    } catch (e) {
+      debugPrint('login: could not read the user profile -> $e');
+    }
     return UserModel(id: user.uid, name: user.displayName ?? '', email: user.email ?? '');
   }
 }
