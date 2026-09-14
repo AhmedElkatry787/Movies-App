@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   equatable: ^2.1.0
   cloud_firestore: ^6.9.0
+  dio: ^5.11.1
 
 dev_dependencies:
   flutter_test:
