@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movies_app/core/cache/app_prefs.dart';
@@ -16,13 +15,17 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), _goToNextScreen);
+    _start();
   }
 
-  Future<void> _goToNextScreen() async {
-    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-    if (isLoggedIn) {
-      if (!mounted) return;
+  Future<void> _start() async {
+    final sessionFuture = _restoreSession();
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final user = await sessionFuture;
+
+    if (!mounted) return;
+
+    if (user != null) {
       Navigator.pushReplacementNamed(context, AppRoutesName.home);
       return;
     }
@@ -33,6 +36,19 @@ class _SplashViewState extends State<SplashView> {
       context,
       seenOnBoarding ? AppRoutesName.login : AppRoutesName.onBoarding,
     );
+  }
+
+  Future<User?> _restoreSession() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) return user;
+    try {
+      return await FirebaseAuth.instance
+          .authStateChanges()
+          .first
+          .timeout(const Duration(seconds: 5));
+    } catch (_) {
+      return FirebaseAuth.instance.currentUser;
+    }
   }
 
   @override

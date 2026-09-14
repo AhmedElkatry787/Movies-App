@@ -56,7 +56,6 @@ class CustomButton extends StatelessWidget {
       );
     }
 
-    // Flutter Icon
     if (icon != null) {
       return Icon(
         icon,

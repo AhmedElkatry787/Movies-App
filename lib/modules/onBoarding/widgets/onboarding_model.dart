@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Height (in design points) of the Figma onboarding frame the per-page
-/// image measurements below were taken from.
 const double kDesignFrameHeight = 932;
 
 class OnBoardingModel {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../auth/presentation/manager/auth_bloc.dart';
-import '../../../auth/presentation/manager/auth_event.dart';
-import '../../../auth/presentation/manager/auth_state.dart';
-import '../../../auth/presentation/manager/injection.dart';
-import '../../../core/app_colors/app_colors.dart';
-import '../../../core/routes/app_routes_name.dart';
-import '../../../model/buttom_model.dart';
+import '../../../../auth/presentation/manager/auth_bloc.dart';
+import '../../../../auth/presentation/manager/auth_event.dart';
+import '../../../../auth/presentation/manager/auth_state.dart';
+import '../../../../auth/presentation/manager/injection.dart';
+import '../../../../core/app_colors/app_colors.dart';
+import '../../../../core/routes/app_routes_name.dart';
+import '../../../../model/buttom_model.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});

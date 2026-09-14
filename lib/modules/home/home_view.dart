@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/app_colors/app_colors.dart';
-import 'package:movies_app/modules/home/pages/browse.dart';
-import 'package:movies_app/modules/home/pages/home.dart';
-import 'package:movies_app/modules/home/pages/profile.dart';
-import 'package:movies_app/modules/home/pages/serach.dart';
+import 'package:movies_app/modules/home/pages/browse/browse.dart';
+import 'package:movies_app/modules/home/pages/home/home.dart';
+import 'package:movies_app/modules/home/pages/profile/profile.dart';
+import 'package:movies_app/modules/home/pages/seacrh/serach.dart';
 import 'package:movies_app/modules/home/wigets/bottom_navgation_bar.dart';
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
