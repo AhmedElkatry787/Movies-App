@@ -8,6 +8,8 @@ class CustomButton extends StatelessWidget {
   final double height;
   final Color backgroundColor;
   final Color textColor;
+  final Color? disabledBackgroundColor;
+  final Color? disabledTextColor;
   final double borderRadius;
   final double fontSize;
   final FontWeight fontWeight;
@@ -27,6 +29,8 @@ class CustomButton extends StatelessWidget {
     this.height = 50,
     this.backgroundColor = const Color(0xffFFC107),
     this.textColor = Colors.black,
+    this.disabledBackgroundColor,
+    this.disabledTextColor,
     this.borderRadius = 8,
     this.fontSize = 20,
     this.fontWeight = FontWeight.w600,
@@ -39,7 +43,7 @@ class CustomButton extends StatelessWidget {
     this.iconAfterText = false,
   });
 
-  Widget? _buildIcon() {
+  Widget? _buildIcon(Color iconColor) {
     if (svgIcon != null) {
       return SvgPicture.asset(
         svgIcon!,
@@ -60,7 +64,7 @@ class CustomButton extends StatelessWidget {
       return Icon(
         icon,
         size: iconSize,
-        color: textColor,
+        color: iconColor,
       );
     }
 
@@ -69,7 +73,10 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonIcon = _buildIcon();
+    final isEnabled = onPressed != null;
+    final effectiveTextColor =
+        isEnabled ? textColor : (disabledTextColor ?? textColor);
+    final buttonIcon = _buildIcon(effectiveTextColor);
 
     return SizedBox(
       width: width ?? double.infinity,
@@ -80,6 +87,8 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: textColor,
+          disabledBackgroundColor: disabledBackgroundColor ?? backgroundColor,
+          disabledForegroundColor: disabledTextColor ?? textColor,
           elevation: 0,
 
           padding: const EdgeInsets.symmetric(
@@ -108,7 +117,7 @@ class CustomButton extends StatelessWidget {
                     fontFamily: 'Inter',
                     fontSize: fontSize,
                     fontWeight: fontWeight,
-                    color: textColor,
+                    color: effectiveTextColor,
                     letterSpacing: 0,
                     height: 1.0,
                   ),

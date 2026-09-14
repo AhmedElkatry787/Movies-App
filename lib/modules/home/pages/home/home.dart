@@ -45,7 +45,7 @@ class _HomeViewState extends State<_HomeView> {
         }
         if (state is MoviesError) {
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.darkBackground,
             body: Center(
               child: Text(state.message, style: const TextStyle(color: AppColors.white)),
             ),
@@ -106,26 +106,22 @@ class _HomeViewState extends State<_HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 7),
                       Center(child: Image.asset('assets/images/Available Now.png', height: 90)),
-                      const SizedBox(height: 16),
-
+                      const SizedBox(height: 21),
                       if (heroMovies.isNotEmpty)
                         HeroCarousel(
                           movies: heroMovies,
                           onPageChanged: (page) => setState(() => _currentPage = page),
                         ),
-
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 21),
                       Center(child: Image.asset('assets/images/Watch Now.png', height: 150)),
-                      const SizedBox(height: 20),
-
+                      const SizedBox(height: 7),
                       for (final genre in genres)
                         CategorySection(
                           title: genre,
                           movies: moviesByGenre[genre]!,
                         ),
-
                       const SizedBox(height: 80),
                     ],
                   ),

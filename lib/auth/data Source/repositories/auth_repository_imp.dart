@@ -67,6 +67,36 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   @override
+  Future<UserEntity> updateProfile({
+    required String name,
+    required String phone,
+    required int avatarIndex,
+  }) async {
+    try {
+      return await remoteDataSource.updateProfile(
+        name: name,
+        phone: phone,
+        avatarIndex: avatarIndex,
+      );
+    } on fb.FirebaseAuthException catch (e) {
+      throw ServerException(_mapAuthError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await remoteDataSource.deleteAccount();
+    } on fb.FirebaseAuthException catch (e) {
+      throw ServerException(_mapAuthError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
   Future<void> logout() async {
     try {
       await remoteDataSource.logout();
@@ -100,6 +130,8 @@ class AuthRepositoryImpl implements AuthRepository {
         return 'كلمة المرور ضعيفة جدًا (لازم 6 حروف على الأقل)';
       case 'invalid-email':
         return 'صيغة الإيميل غير صحيحة';
+      case 'requires-recent-login':
+        return 'لأمان حسابك، سجّل دخول تاني قبل تنفيذ العملية دي';
       case 'no-current-user':
         return 'لا يوجد مستخدم مسجل دخول حاليًا';
       case 'sign_in_cancelled':

@@ -33,6 +33,21 @@ class AuthError extends AuthState {
   List<Object?> get props => [message];
 }
 
+class ProfileUpdated extends AuthState {
+  final UserEntity user;
+  const ProfileUpdated(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class ProfileUnchanged extends AuthState {
+  const ProfileUnchanged();
+}
+
+class AccountDeleted extends AuthState {
+  const AccountDeleted();
+}
+
 class LoggedOut extends AuthState {
   const LoggedOut();
 }

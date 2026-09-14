@@ -35,7 +35,7 @@ class _HeroCarouselState extends State<HeroCarousel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 320,
+      height: 350,
       child: PageView.builder(
         controller: _controller,
         itemCount: widget.movies.length,

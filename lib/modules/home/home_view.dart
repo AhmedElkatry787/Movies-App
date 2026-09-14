@@ -31,35 +31,33 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.darkBackground,
+    return Scaffold(
+      backgroundColor: AppColors.darkBackground,
 
-        body: PageView.builder(
-          controller: _pageController,
-          itemCount: pages.length,
-          onPageChanged: (index) {
-            setState(() {
-              selectedIndex = index;
-            });
-          },
-          itemBuilder: (context, index) {
-            return pages[index];
-          },
-        ),
-
-
-        bottomNavigationBar: CustomBottomNavigationBar(
-          selectedIndex: selectedIndex,
-          onItemTapped: (int index) {  setState(() {
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: pages.length,
+        onPageChanged: (index) {
+          setState(() {
             selectedIndex = index;
           });
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          ); },
-        ),
+        },
+        itemBuilder: (context, index) {
+          return pages[index];
+        },
+      ),
+
+
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: selectedIndex,
+        onItemTapped: (int index) {  setState(() {
+          selectedIndex = index;
+        });
+        _pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        ); },
       ),
     );
   }

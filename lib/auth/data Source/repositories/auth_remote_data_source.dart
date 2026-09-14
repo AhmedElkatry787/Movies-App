@@ -17,6 +17,12 @@ abstract class AuthRemoteDataSource {
   Future<UserModel> signInWithGoogle();
   Future<void> forgetPassword({required String email});
   Future<UserModel> getCurrentUser();
+  Future<UserModel> updateProfile({
+    required String name,
+    required String phone,
+    required int avatarIndex,
+  });
+  Future<void> deleteAccount();
   Future<void> logout();
 }
 
@@ -119,18 +125,64 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> forgetPassword({required String email}) {
     return firebaseAuth.sendPasswordResetEmail(email: email);
   }
+
   @override
   Future<UserModel> getCurrentUser() async {
-    final user = firebaseAuth.currentUser;
+    return _fetchProfile(_requireCurrentUser());
+  }
 
-    if (user == null) {
-      throw fb.FirebaseAuthException(
-        code: 'no-current-user',
-        message: 'لا يوجد مستخدم مسجل دخول حاليًا',
-      );
+  @override
+  Future<UserModel> updateProfile({
+    required String name,
+    required String phone,
+    required int avatarIndex,
+  }) async {
+    final user = _requireCurrentUser();
+    final current = await _fetchProfile(user);
+
+    final nameChanged = name != current.name;
+    final phoneChanged = phone != (current.phone ?? '');
+    final avatarChanged = avatarIndex != (current.avatarIndex ?? 0);
+
+    if (!nameChanged && !phoneChanged && !avatarChanged) return current;
+
+    final updated = UserModel(
+      id: current.id,
+      name: name,
+      email: current.email,
+      phone: phone,
+      avatarIndex: avatarIndex,
+    );
+
+    await firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(updated.toMap(), SetOptions(merge: true))
+        .timeout(_profileWriteTimeout);
+
+    if (nameChanged) {
+      await user.updateDisplayName(name).timeout(_profileWriteTimeout);
     }
 
-    return _fetchProfile(user);
+    return updated;
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final user = _requireCurrentUser();
+
+    try {
+      await firestore
+          .collection('users')
+          .doc(user.uid)
+          .delete()
+          .timeout(_profileWriteTimeout);
+    } catch (e) {
+      debugPrint('delete account: could not remove the user profile -> $e');
+    }
+
+    await user.delete();
+    await googleSignIn.signOut();
   }
 
   @override
@@ -139,6 +191,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     await firebaseAuth.signOut();
   }
 
+  fb.User _requireCurrentUser() {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw fb.FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'لا يوجد مستخدم مسجل دخول حاليًا',
+      );
+    }
+    return user;
+  }
 
   Future<UserModel> _fetchProfile(fb.User user) async {
     try {
@@ -154,4 +216,3 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return UserModel(id: user.uid, name: user.displayName ?? '', email: user.email ?? '');
   }
 }
-

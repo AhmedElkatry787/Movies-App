@@ -7,6 +7,8 @@ import '../../domain/usecases/forget_password_usecase.dart';
 import '../../domain/usecases/login_google_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
+import '../../domain/usecases/update_profile_usecase.dart';
+import '../../domain/usecases/delete_account_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/get_current_user_usecase.dart';
 import 'auth_bloc.dart';
@@ -27,5 +29,7 @@ AuthBloc buildAuthBloc() {
     getCurrentUserUseCase: GetCurrentUserUseCase(repository),
     forgetPasswordUseCase: ForgetPasswordUseCase(repository),
     logoutUseCase: LogoutUseCase(repository),
+    updateProfileUseCase: UpdateProfileUseCase(repository),
+    deleteAccountUseCase: DeleteAccountUseCase(repository),
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../auth/domain/entities/user_entity.dart';
 import '../../../../auth/presentation/manager/auth_bloc.dart';
 import '../../../../auth/presentation/manager/auth_event.dart';
 import '../../../../auth/presentation/manager/auth_state.dart';
@@ -8,6 +9,7 @@ import '../../../../auth/presentation/manager/injection.dart';
 import '../../../../core/app_colors/app_colors.dart';
 import '../../../../core/routes/app_routes_name.dart';
 import '../../../../model/buttom_model.dart';
+import 'edit_profile/edit_profile_screen.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -103,7 +105,7 @@ class _ProfileViewState extends State<_ProfileView> {
                         children: [
                           CustomButton(
                             text: 'Edit Profile',
-                            onPressed: () { },
+                            onPressed: () => _openEditProfile(user),
                             backgroundColor: AppColors.yellow,
                             textColor: AppColors.darkGrey,
                             height: 56,
@@ -153,6 +155,18 @@ class _ProfileViewState extends State<_ProfileView> {
     );
   }
 
+
+  Future<void> _openEditProfile(UserEntity user) async {
+    final bloc = context.read<AuthBloc>();
+
+    final updated = await Navigator.push<UserEntity>(
+      context,
+      MaterialPageRoute(builder: (_) => EditProfileScreen(user: user)),
+    );
+
+    if (updated == null) return;
+    bloc.add(const CurrentUserRequested());
+  }
 
   Widget _tabButton(String label, int index,String iconPath) {
     final isSelected = _tabIndex == index;
