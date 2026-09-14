@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../auth/presentation/manager/auth_bloc.dart';
 import '../../../auth/presentation/manager/auth_event.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
 import '../../../core/routes/app_routes_name.dart';
+import '../../../model/buttom_model.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -52,102 +54,118 @@ class _ProfileViewState extends State<_ProfileView> {
           final user = state.user;
           final avatarPath = 'assets/images/p${(user.avatarIndex ?? 0) + 1}.png';
 
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Profile', style: TextStyle(color: Colors.grey, fontSize: 16)),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.darkGrey,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(radius: 32, backgroundImage: AssetImage(avatarPath)),
-                            const Expanded(child: SizedBox()),
-                            _statColumn('12', 'Wish List'),
-                            const SizedBox(width: 24),
-                            _statColumn('10', 'History'),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(user.name, style: const TextStyle(color: AppColors.white, fontSize: 16)),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-
-                                },
-                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.yellow),
-                                child: const Text('Edit Profile', style: TextStyle(color: Colors.black)),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  context.read<AuthBloc>().add(const LogoutRequested());
-                                },
-                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.red),
-                                icon: const Icon(Icons.logout, color: Colors.white),
-                                label: const Text('Exit', style: TextStyle(color: Colors.white)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
+          return Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.darkGrey,
+                ),
+                child: Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _tabButton('Watch List', 0),
-                      const SizedBox(width: 24),
-                      _tabButton('History', 1),
+                      SizedBox(height: 52),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                              radius: 70,
+                              backgroundImage: AssetImage(avatarPath)
+                          ),
+                          Column(
+                            children: [
+                              Text("12", style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                              Text('Wish list ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("12", style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                              Text(' history ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Text(
+                          user.name,
+                          style:TextStyle(
+                              color: AppColors.white,
+                              fontSize: 20, fontWeight: FontWeight.w700
+                          ),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            text: 'Edit Profile',
+                            onPressed: () { },
+                            backgroundColor: AppColors.yellow,
+                            textColor: AppColors.darkGrey,
+                            height: 56,
+                            borderRadius: 15,
+                            width: 255,
+                          ),
+                           SizedBox(width: 10),
+                          CustomButton(
+                            text: 'ُExit',
+                            icon: Icons.logout,
+                            onPressed: () {
+                              context.read<AuthBloc>().add(const LogoutRequested());
+                              },
+                            backgroundColor: AppColors.red,
+                            textColor: AppColors.darkGrey,
+                            height: 56,
+                            borderRadius: 15,
+                            width: 135,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: _tabButton('Watch List', 0,'assets/icons/watchlist.svg')),
+                          Expanded(child: _tabButton('History', 1,'assets/icons/Folder.svg')),
+                        ],
+                      ),
                     ],
                   ),
-                  const Divider(color: AppColors.darkGrey),
-                  const Expanded(
-                    child: Center(
-                      child: Text('لسه مفيش أفلام', style: TextStyle(color: Colors.grey)),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+               Expanded(
+                 child: Center(
+                     child: Image.asset(
+                       'assets/images/Empty 1.png',
+                       width: 120,
+                       height: 120,
+                     ),
+                 ),
+               ),
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _statColumn(String value, String label) {
-    return Column(
-      children: [
-        Text(value, style: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-      ],
-    );
-  }
 
-  Widget _tabButton(String label, int index) {
+  Widget _tabButton(String label, int index,String iconPath) {
     final isSelected = _tabIndex == index;
+
     return GestureDetector(
       onTap: () => setState(() => _tabIndex = index),
       child: Column(
         children: [
-          Text(label, style: TextStyle(color: isSelected ? AppColors.yellow : Colors.grey)),
+          SvgPicture.asset(iconPath),
           const SizedBox(height: 4),
-          if (isSelected) Container(height: 2, width: 60, color: AppColors.yellow),
+          Text(label, style: TextStyle(color : AppColors.white, fontSize: 20, fontWeight: FontWeight.w400)),
+          const SizedBox(height: 24),
+          if (isSelected) Container(height: 2, width: 250, color: AppColors.yellow),
         ],
       ),
     );
