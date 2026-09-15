@@ -266,13 +266,13 @@ class _EditProfileViewState extends State<_EditProfileView> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 75),
                           if (_isGridOpen)
                             AvatarGrid(
                               selectedIndex: _avatarIndex,
                               onSelected: _selectAvatar,
                             ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 10),
                         ],
                       ),
                     ),
