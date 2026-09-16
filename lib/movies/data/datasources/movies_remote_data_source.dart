@@ -1,9 +1,11 @@
 import '../../../core/network/dio_api_client.dart';
 import '../../../core/network/end_point.dart';
 import '../models/movie_model.dart';
+import '../models/movie_details_model.dart';
 
 abstract class MoviesRemoteDataSource {
   Future<List<MovieModel>> getMovies();
+  Future<MovieDetailsModel> getMovieDetails(int movieId);
 }
 
 class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
@@ -31,11 +33,25 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
       queryParameters: {'limit': _pageSize, 'page': page},
     );
 
-    final moviesJson =
-        response.data['data']['movies'] as List<dynamic>? ?? [];
+    final moviesJson = response.data['data']['movies'] as List<dynamic>? ?? [];
 
     return moviesJson
         .map((movieJson) => MovieModel.fromJson(movieJson as Map<String, dynamic>))
         .toList();
+  }
+
+  @override
+  Future<MovieDetailsModel> getMovieDetails(int movieId) async {
+    final response = await DioApiClient.instance.get(
+      EndPoints.movieDetails,
+      queryParameters: {
+        'movie_id': movieId,
+        'with_cast': true,
+        'with_images': true,
+      },
+    );
+
+    final movieJson = response.data['data']['movie'] as Map<String, dynamic>;
+    return MovieDetailsModel.fromJson(movieJson);
   }
 }

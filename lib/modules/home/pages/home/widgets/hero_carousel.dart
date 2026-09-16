@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../movie_details/movie_details_screen.dart';
 import 'rating_badge.dart';
 
 class HeroCarousel extends StatefulWidget {
@@ -48,19 +49,25 @@ class _HeroCarouselState extends State<HeroCarousel> {
             scale: scale,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      movie.posterUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => MovieDetailsScreen(movieId: movie.id)),
+                ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        movie.posterUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
                     ),
-                  ),
-                  Positioned(top: 12, left: 12, child: RatingBadge(rating: movie.rating)),
-                ],
+                    Positioned(top: 12, left: 12, child: RatingBadge(rating: movie.rating)),
+                  ],
+                ),
               ),
             ),
           );

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../core/error/exceptions.dart';
 import '../../domain/entities/movie_entity.dart';
+import '../../domain/entities/movie_details_entity.dart';
 import '../../domain/repositories/movies_repository.dart';
 import '../datasources/movies_remote_data_source.dart';
 
@@ -12,6 +13,17 @@ class MoviesRepositoryImpl implements MoviesRepository {
   Future<List<MovieEntity>> getMovies() async {
     try {
       return await remoteDataSource.getMovies();
+    } on DioException catch (e) {
+      throw ServerException(_mapDioError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<MovieDetailsEntity> getMovieDetails(int movieId) async {
+    try {
+      return await remoteDataSource.getMovieDetails(movieId);
     } on DioException catch (e) {
       throw ServerException(_mapDioError(e));
     } catch (e) {
