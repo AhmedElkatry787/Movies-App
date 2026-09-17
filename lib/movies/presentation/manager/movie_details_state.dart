@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/movie_details_entity.dart';
+import '../../domain/entities/movie_entity.dart';
 
 abstract class MovieDetailsState extends Equatable {
   const MovieDetailsState();
@@ -17,10 +18,11 @@ class MovieDetailsLoading extends MovieDetailsState {
 
 class MovieDetailsLoaded extends MovieDetailsState {
   final MovieDetailsEntity movie;
-  const MovieDetailsLoaded(this.movie);
+  final List<MovieEntity> similarMovies;
+  const MovieDetailsLoaded(this.movie, {this.similarMovies = const []});
 
   @override
-  List<Object?> get props => [movie];
+  List<Object?> get props => [movie, similarMovies];
 }
 
 class MovieDetailsError extends MovieDetailsState {

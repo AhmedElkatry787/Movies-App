@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_colors/app_colors.dart';
-import '../../../model/buttom_model.dart';
+import '../../../core/widgets/buttom_model.dart';
 import 'onboarding_model.dart';
 
 class OnBoardingWelcomePage extends StatelessWidget {

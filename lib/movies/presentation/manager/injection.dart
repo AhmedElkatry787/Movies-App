@@ -2,6 +2,7 @@ import '../../data/datasources/movies_remote_data_source.dart';
 import '../../data/repositories/movies_repository_impl.dart';
 import '../../domain/usecases/get_movies_usecase.dart';
 import '../../domain/usecases/get_movie_details_usecase.dart';
+import '../../domain/usecases/get_movie_suggestions_usecase.dart';
 import 'movies_bloc.dart';
 import 'movie_details_bloc.dart';
 
@@ -20,5 +21,6 @@ MovieDetailsBloc buildMovieDetailsBloc() {
 
   return MovieDetailsBloc(
     getMovieDetailsUseCase: GetMovieDetailsUseCase(repository),
+    getMovieSuggestionsUseCase: GetMovieSuggestionsUseCase(repository),
   );
 }

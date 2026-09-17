@@ -70,7 +70,7 @@ class DetailsBackdrop extends StatelessWidget {
                   style: const TextStyle(
                     color: AppColors.white,
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -79,7 +79,7 @@ class DetailsBackdrop extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFFADADAD),
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
@@ -97,8 +97,8 @@ class _PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90,
-      height: 90,
+      width: 100,
+      height: 100,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -112,7 +112,7 @@ class _PlayButton extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: const BoxDecoration(color: AppColors.white, shape: BoxShape.circle),
-          child: const Icon(Icons.play_arrow_rounded, color: AppColors.yellow, size: 38),
+          child: const Icon(Icons.play_arrow_rounded, color: AppColors.yellow, size: 40),
         ),
       ),
     );

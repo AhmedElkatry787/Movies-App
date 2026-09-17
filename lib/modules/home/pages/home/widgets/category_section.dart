@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/app_colors/app_colors.dart';
-import '../../../movie_details/movie_details_screen.dart';
-import 'rating_badge.dart';
+import '../../../../../core/widgets/movie_card.dart';
 
 class CategorySection extends StatelessWidget {
   final String title;
@@ -40,27 +39,9 @@ class CategorySection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              final movie = movies[index];
-              return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => MovieDetailsScreen(movieId: movie.id)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: SizedBox(
-                    width: 110,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(14),
-                          child: Image.network(movie.posterUrl, width: 110, height: 220, fit: BoxFit.cover),
-                        ),
-                        Positioned(top: 8, left: 8, child: RatingBadge(rating: movie.rating)),
-                      ],
-                    ),
-                  ),
-                ),
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: MovieCard(movie: movies[index], width: 110, height: 220, borderRadius: 14),
               );
             },
           ),

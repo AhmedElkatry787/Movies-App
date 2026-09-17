@@ -31,6 +31,17 @@ class MoviesRepositoryImpl implements MoviesRepository {
     }
   }
 
+  @override
+  Future<List<MovieEntity>> getMovieSuggestions(int movieId) async {
+    try {
+      return await remoteDataSource.getMovieSuggestions(movieId);
+    } on DioException catch (e) {
+      throw ServerException(_mapDioError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
   String _mapDioError(DioException e) {
     switch (e.type) {
       case DioExceptionType.connectionTimeout:

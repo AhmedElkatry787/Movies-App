@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/app_colors/app_colors.dart';
+import '../../../../../core/widgets/buttom_model.dart';
 import '../../../../../movies/domain/entities/movie_details_entity.dart';
 
 class DetailsInfoSection extends StatelessWidget {
@@ -13,21 +14,14 @@ class DetailsInfoSection extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
       child: Column(
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.red,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              ),
-              child: const Text(
-                'Watch',
-                style: TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
+          CustomButton(
+            text: 'Watch',
+            onPressed: () {},
+            height: 58,
+            backgroundColor: AppColors.red,
+            textColor: AppColors.white,
+            borderRadius: 15,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 16),
           Row(

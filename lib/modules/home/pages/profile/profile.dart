@@ -8,7 +8,7 @@ import '../../../../auth/presentation/manager/auth_state.dart';
 import '../../../../auth/presentation/manager/injection.dart';
 import '../../../../core/app_colors/app_colors.dart';
 import '../../../../core/routes/app_routes_name.dart';
-import '../../../../model/buttom_model.dart';
+import '../../../../core/widgets/buttom_model.dart';
 import 'edit_profile/edit_profile_screen.dart';
 
 class Profile extends StatelessWidget {

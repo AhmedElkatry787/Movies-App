@@ -5,6 +5,7 @@ import 'package:movies_app/modules/home/movie_details/wedgets/details_cast.dart'
 import 'package:movies_app/modules/home/movie_details/wedgets/details_genres.dart';
 import 'package:movies_app/modules/home/movie_details/wedgets/details_info_section.dart';
 import 'package:movies_app/modules/home/movie_details/wedgets/details_screenshots.dart';
+import 'package:movies_app/modules/home/movie_details/wedgets/details_similar.dart';
 import 'package:movies_app/modules/home/movie_details/wedgets/details_summary.dart';
 import '../../../../core/app_colors/app_colors.dart';
 import '../../../../movies/presentation/manager/injection.dart';
@@ -53,7 +54,8 @@ class _MovieDetailsView extends StatelessWidget {
             );
           }
 
-          final movie = (state as MovieDetailsLoaded).movie;
+          final loaded = state as MovieDetailsLoaded;
+          final movie = loaded.movie;
 
           return SingleChildScrollView(
             child: Column(
@@ -63,6 +65,10 @@ class _MovieDetailsView extends StatelessWidget {
                 DetailsInfoSection(movie: movie),
                 _sectionTitle('Screen Shots'),
                 DetailsScreenshots(screenshots: movie.screenshots),
+                if (loaded.similarMovies.isNotEmpty) ...[
+                  _sectionTitle('Similar'),
+                  DetailsSimilar(movies: loaded.similarMovies),
+                ],
                 _sectionTitle('Summary'),
                 DetailsSummary(summary: movie.summary),
                 _sectionTitle('Cast'),

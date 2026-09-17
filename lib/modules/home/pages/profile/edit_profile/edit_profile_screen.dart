@@ -7,8 +7,8 @@ import '../../../../../auth/presentation/manager/auth_state.dart';
 import '../../../../../auth/presentation/manager/injection.dart';
 import '../../../../../core/app_colors/app_colors.dart';
 import '../../../../../core/routes/app_routes_name.dart';
-import '../../../../../model/buttom_model.dart';
-import '../../../../../model/textfromfield_model.dart';
+import '../../../../../core/widgets/buttom_model.dart';
+import '../../../../../core/widgets/textfromfield_model.dart';
 import 'widgets/avatar_grid.dart';
 
 class EditProfileScreen extends StatelessWidget {

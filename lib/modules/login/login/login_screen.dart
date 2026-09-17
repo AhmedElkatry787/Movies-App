@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/core/routes/app_routes_name.dart';
-import 'package:movies_app/model/lang_selector.dart';
 import '../../../auth/presentation/manager/auth_bloc.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
-import '../../../model/buttom_model.dart';
-import '../../../model/textfromfield_model.dart';
+import '../../../core/widgets/buttom_model.dart';
+import '../../../core/widgets/lang_selector.dart';
 import '../../../auth/presentation/manager/auth_event.dart';
+import '../../../core/widgets/textfromfield_model.dart';
 
 
 class LoginScreen extends StatelessWidget {

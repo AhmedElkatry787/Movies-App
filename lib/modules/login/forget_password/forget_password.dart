@@ -5,8 +5,9 @@ import '../../../auth/presentation/manager/auth_event.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
-import '../../../model/buttom_model.dart';
-import '../../../model/textfromfield_model.dart';
+import '../../../core/widgets/buttom_model.dart';
+import '../../../core/widgets/textfromfield_model.dart';
+
 
 class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});

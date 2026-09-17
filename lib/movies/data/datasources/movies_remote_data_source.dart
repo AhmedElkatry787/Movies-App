@@ -6,6 +6,7 @@ import '../models/movie_details_model.dart';
 abstract class MoviesRemoteDataSource {
   Future<List<MovieModel>> getMovies();
   Future<MovieDetailsModel> getMovieDetails(int movieId);
+  Future<List<MovieModel>> getMovieSuggestions(int movieId);
 }
 
 class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
@@ -53,5 +54,19 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
 
     final movieJson = response.data['data']['movie'] as Map<String, dynamic>;
     return MovieDetailsModel.fromJson(movieJson);
+  }
+
+  @override
+  Future<List<MovieModel>> getMovieSuggestions(int movieId) async {
+    final response = await DioApiClient.instance.get(
+      EndPoints.movieSuggestions,
+      queryParameters: {'movie_id': movieId},
+    );
+
+    final moviesJson = response.data['data']['movies'] as List<dynamic>? ?? [];
+
+    return moviesJson
+        .map((movieJson) => MovieModel.fromJson(movieJson as Map<String, dynamic>))
+        .toList();
   }
 }

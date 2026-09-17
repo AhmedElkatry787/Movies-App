@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/model/buttom_model.dart';
-import 'package:movies_app/model/textfromfield_model.dart';
 import 'package:movies_app/modules/login/register/widgets/avatar_selector.dart';
 import '../../../auth/presentation/manager/auth_bloc.dart';
 import '../../../auth/presentation/manager/auth_event.dart';
@@ -9,7 +7,9 @@ import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
 import '../../../core/routes/app_routes_name.dart';
-import '../../../model/lang_selector.dart';
+import '../../../core/widgets/buttom_model.dart';
+import '../../../core/widgets/lang_selector.dart';
+import '../../../core/widgets/textfromfield_model.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
