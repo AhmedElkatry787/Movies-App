@@ -12,6 +12,8 @@ import '../../../../movies/presentation/manager/injection.dart';
 import '../../../../movies/presentation/manager/movie_details_bloc.dart';
 import '../../../../movies/presentation/manager/movie_details_event.dart';
 import '../../../../movies/presentation/manager/movie_details_state.dart';
+import '../../../../watchlist/presentation/manager/injection.dart';
+import '../../../../watchlist/presentation/manager/watchlist_event.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   final int movieId;
@@ -19,9 +21,12 @@ class MovieDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => buildMovieDetailsBloc()..add(MovieDetailsRequested(movieId)),
-      child: const _MovieDetailsView(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => buildMovieDetailsBloc()..add(MovieDetailsRequested(movieId))),
+        BlocProvider(create: (_) => buildWatchlistBloc()..add(const WatchlistSubscriptionRequested())),
+      ],
+      child: _MovieDetailsView(),
     );
   }
 }
@@ -31,10 +36,10 @@ class _MovieDetailsView extends StatelessWidget {
 
   Widget _sectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+      padding: EdgeInsets.fromLTRB(16, 24, 16, 12),
       child: Text(
         title,
-        style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.bold),
+        style: TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700),
       ),
     );
   }
@@ -75,7 +80,7 @@ class _MovieDetailsView extends StatelessWidget {
                 DetailsCast(cast: movie.cast),
                 _sectionTitle('Genres'),
                 DetailsGenres(genres: movie.genres),
-                const SizedBox(height: 30),
+                SizedBox(height: 57),
               ],
             ),
           );

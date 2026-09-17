@@ -12,7 +12,7 @@ class DetailsSummary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Text(
         summary,
-        style: TextStyle(color: AppColors.white.withOpacity(0.8), fontSize: 14, height: 1.5),
+        style: TextStyle(color: AppColors.white, fontSize: 16, height: 1.5, fontWeight: FontWeight.w400),
       ),
     );
   }

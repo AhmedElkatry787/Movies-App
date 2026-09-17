@@ -13,14 +13,14 @@ class DetailsSimilar extends StatelessWidget {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics:  NeverScrollableScrollPhysics(),
+      padding:  EdgeInsets.symmetric(horizontal: 16),
       itemCount: movies.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        childAspectRatio: 0.68,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 189 / 279,
       ),
       itemBuilder: (context, index) => MovieCard(movie: movies[index]),
     );

@@ -9,6 +9,11 @@ import '../../../../auth/presentation/manager/injection.dart';
 import '../../../../core/app_colors/app_colors.dart';
 import '../../../../core/routes/app_routes_name.dart';
 import '../../../../core/widgets/buttom_model.dart';
+import '../../../../core/widgets/movie_card.dart';
+import '../../../../watchlist/presentation/manager/injection.dart';
+import '../../../../watchlist/presentation/manager/watchlist_bloc.dart';
+import '../../../../watchlist/presentation/manager/watchlist_event.dart';
+import '../../../../watchlist/presentation/manager/watchlist_state.dart';
 import 'edit_profile/edit_profile_screen.dart';
 
 class Profile extends StatelessWidget {
@@ -16,8 +21,11 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => buildAuthBloc()..add(const CurrentUserRequested()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => buildAuthBloc()..add(const CurrentUserRequested())),
+        BlocProvider(create: (_) => buildWatchlistBloc()..add(const WatchlistSubscriptionRequested())),
+      ],
       child: const _ProfileView(),
     );
   }
@@ -77,7 +85,12 @@ class _ProfileViewState extends State<_ProfileView> {
                           ),
                           Column(
                             children: [
-                              Text("12", style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                              BlocBuilder<WatchlistBloc, WatchlistState>(
+                                builder: (context, watchlist) => Text(
+                                  '${watchlist.count}',
+                                  style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700),
+                                ),
+                              ),
                               Text('Wish list ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
                             ],
                           ),
@@ -140,13 +153,7 @@ class _ProfileViewState extends State<_ProfileView> {
                 ),
               ),
                Expanded(
-                 child: Center(
-                     child: Image.asset(
-                       'assets/images/Empty 1.png',
-                       width: 120,
-                       height: 120,
-                     ),
-                 ),
+                 child: _tabIndex == 0 ? _watchList() : _emptyList(),
                ),
             ],
           );
@@ -155,6 +162,39 @@ class _ProfileViewState extends State<_ProfileView> {
     );
   }
 
+
+  Widget _watchList() {
+    return BlocBuilder<WatchlistBloc, WatchlistState>(
+      builder: (context, watchlist) {
+        if (watchlist.isLoading) {
+          return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
+        }
+        if (watchlist.movies.isEmpty) return _emptyList();
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: watchlist.movies.length,
+          gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 0.68,
+          ),
+          itemBuilder: (context, index) => MovieCard(movie: watchlist.movies[index]),
+        );
+      },
+    );
+  }
+
+  Widget _emptyList() {
+    return Center(
+      child: Image.asset(
+        'assets/images/Empty 1.png',
+        width: 120,
+        height: 120,
+      ),
+    );
+  }
 
   Future<void> _openEditProfile(UserEntity user) async {
     final bloc = context.read<AuthBloc>();

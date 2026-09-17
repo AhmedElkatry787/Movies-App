@@ -9,18 +9,19 @@ class DetailsGenres extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
         children: genres.map((genre) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            height: 36,
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: AppColors.darkGrey,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(genre, style: const TextStyle(color: AppColors.white, fontSize: 13)),
+            child: Text(genre, style: const TextStyle(color: AppColors.white, fontSize: 16, fontWeight: FontWeight.w400)),
           );
         }).toList(),
       ),

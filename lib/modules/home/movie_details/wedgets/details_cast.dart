@@ -28,27 +28,37 @@ class _CastRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
+      width: double.infinity,
+      height: 90,
+      margin:  EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.darkGrey,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: AppColors.darkBackground,
-            backgroundImage: member.imageUrl != null ? NetworkImage(member.imageUrl!) : null,
-            child: member.imageUrl == null ? const Icon(Icons.person, color: AppColors.white) : null,
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              color: AppColors.darkGrey,
+              borderRadius: BorderRadius.circular(10),
+              image: member.imageUrl != null
+                  ? DecorationImage(image: NetworkImage(member.imageUrl!), fit: BoxFit.cover)
+                  : null,
+            ),
+            child: member.imageUrl == null
+                ? const Icon(Icons.person, color: AppColors.white)
+                : null,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name: ${member.name}', style: const TextStyle(color: AppColors.white, fontWeight: FontWeight.bold)),
-                Text('Character: ${member.characterName}', style: TextStyle(color: AppColors.white.withOpacity(0.7))),
+                Text('Name: ${member.name}', style: const TextStyle(color: AppColors.white, fontWeight: FontWeight.w400, fontSize: 20)),
+                Text('Character: ${member.characterName}', style: TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w400)),
               ],
             ),
           ),

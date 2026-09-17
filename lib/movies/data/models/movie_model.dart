@@ -24,4 +24,28 @@ class MovieModel extends MovieEntity {
       summary: json['summary'] as String? ?? '',
     );
   }
+
+  factory MovieModel.fromEntity(MovieEntity movie) {
+    return MovieModel(
+      id: movie.id,
+      title: movie.title,
+      year: movie.year,
+      rating: movie.rating,
+      genres: movie.genres,
+      posterUrl: movie.posterUrl,
+      summary: movie.summary,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'year': year,
+      'rating': rating,
+      'genres': genres,
+      'medium_cover_image': posterUrl,
+      'summary': summary,
+    };
+  }
 }

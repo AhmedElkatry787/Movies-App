@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/core/routes/app_routes_name.dart';
 import '../../../../../core/app_colors/app_colors.dart';
 import '../../../../../movies/domain/entities/movie_details_entity.dart';
+import '../../../../../movies/domain/entities/movie_entity.dart';
+import '../../../../../watchlist/presentation/manager/watchlist_bloc.dart';
+import '../../../../../watchlist/presentation/manager/watchlist_event.dart';
+import '../../../../../watchlist/presentation/manager/watchlist_state.dart';
 
 class DetailsBackdrop extends StatelessWidget {
   final MovieDetailsEntity movie;
@@ -46,12 +52,9 @@ class DetailsBackdrop extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.white, size: 26),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.popAndPushNamed(context, AppRoutesName.home,),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.bookmark, color: AppColors.white, size: 28),
-                      onPressed: () {},
-                    ),
+                    _WatchlistButton(movie: movie),
                   ],
                 ),
               ),
@@ -87,6 +90,46 @@ class DetailsBackdrop extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _WatchlistButton extends StatelessWidget {
+  final MovieDetailsEntity movie;
+
+  const _WatchlistButton({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<WatchlistBloc, WatchlistState>(
+      listenWhen: (previous, current) => current.errorMessage != null,
+      listener: (context, state) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+      },
+      builder: (context, state) {
+        final isSaved = state.contains(movie.id);
+
+        return IconButton(
+          icon: Icon(
+            isSaved ? Icons.bookmark : Icons.bookmark_border,
+            color: isSaved ? AppColors.yellow : AppColors.white,
+            size: 28,
+          ),
+          onPressed: state.isLoading
+              ? null
+              : () => context.read<WatchlistBloc>().add(WatchlistToggled(
+                    MovieEntity(
+                      id: movie.id,
+                      title: movie.title,
+                      year: movie.year,
+                      rating: movie.rating,
+                      genres: movie.genres,
+                      posterUrl: movie.posterUrl,
+                      summary: movie.summary,
+                    ),
+                  )),
+        );
+      },
     );
   }
 }
