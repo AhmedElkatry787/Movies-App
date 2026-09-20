@@ -175,7 +175,7 @@ class _ProfileViewState extends State<_ProfileView> {
           padding: const EdgeInsets.all(16),
           itemCount: watchlist.movies.length,
           gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+            crossAxisCount: 3,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
             childAspectRatio: 0.68,

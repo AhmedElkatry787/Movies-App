@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/core/routes/app_routes_name.dart';
 import '../../../../../core/app_colors/app_colors.dart';
 import '../../../../../movies/domain/entities/movie_details_entity.dart';
 import '../../../../../movies/domain/entities/movie_entity.dart';
@@ -52,7 +51,7 @@ class DetailsBackdrop extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.white, size: 26),
-                      onPressed: () => Navigator.popAndPushNamed(context, AppRoutesName.home,),
+                      onPressed: () => Navigator.pop(context),
                     ),
                     _WatchlistButton(movie: movie),
                   ],
