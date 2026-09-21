@@ -15,7 +15,7 @@ flutter build apk               # release build
 
 `test/widget_test.dart` is still the untouched Flutter counter template and fails against this app; there is no real test suite yet.
 
-## Stack
+## Stack 
 
 Flutter (Dart SDK `^3.12.2`), `flutter_bloc` + `equatable` for state, `dio` for HTTP, Firebase (`firebase_auth`, `cloud_firestore`, `google_sign_in`) for accounts and saved data, `shared_preferences` for local flags, `flutter_svg` for icons. Fonts: Inter (set globally as the app theme's `fontFamily`).
 
@@ -23,11 +23,12 @@ Movie data comes from the YTS API (`https://yts.gg/api/v2/`, no key required) th
 
 ## Architecture
 
-Three feature packages under `lib/`, each with the same clean-architecture layers, plus the UI in `lib/modules/`:
+Four feature packages under `lib/`, each with the same clean-architecture layers, plus the UI in `lib/modules/`:
 
 - `lib/auth/` — Firebase email/Google sign-in, profile updates, account deletion. Note the folder is literally named `data Source` (with a space), so imports of it are percent-encoded (`data%20Source`).
-- `lib/movies/` — YTS list, movie details, and suggestions.
+- `lib/movies/` — YTS list, search (`query_term`), movie details, and suggestions.
 - `lib/watchlist/` — per-user saved movies in Firestore at `users/{uid}/watchlist/{movieId}`, exposed as a **stream** so the bookmark icon and the profile count stay in sync live.
+- `lib/history/` — the last 20 movies whose details screen was opened, in Firestore at `users/{uid}/history/{movieId}`, also a **stream**. Writes dedupe by movie id and prune anything past 20.
 
 Each package:
 
@@ -52,9 +53,9 @@ Note the typos baked into paths — `wedgets/`, `wigets/`, `seacrh/serach.dart`,
 - **Reuse the project's own widgets in `lib/core/widgets/`** instead of raw Flutter ones: `CustomButton` (`buttom_model.dart`), `CustomTextFormField` (`textfromfield_model.dart`), `MovieCard`, `RatingBadge`, `LangSelector`. `CustomButton` defaults to a yellow background with black text, so pass `backgroundColor`/`textColor` when a screen needs otherwise.
 - `MovieCard` renders a poster plus rating badge and navigates to `MovieDetailsScreen` unless given an `onTap`.
 - Colors come from `AppColors` (`lib/core/app_colors/app_colors.dart`) — dark background `#121312`, dark grey `#282A28`, yellow `#FFBB3B`, red `#E82626`.
-- Blocs are event-driven (`on<Event>`) and states are `Equatable`; states are separate subclasses (`XLoading`, `XLoaded`, `XError`), except `WatchlistState`, which is a single class with `copyWith`.
+- Blocs are event-driven (`on<Event>`) and states are `Equatable`; states are separate subclasses (`XLoading`, `XLoaded`, `XError`), except `WatchlistState` and `HistoryState`, the stream-backed ones, which are single classes with `copyWith`.
 - Designs are measured from a 430px-wide frame; translate sizes to ratios (for example the Similar grid uses `childAspectRatio: 189 / 279` with a 20px gap) rather than hardcoding pixel widths.
-- Firestore security rules must allow a signed-in user to read/write their own `users/{uid}` document **and** its `watchlist` subcollection.
+- Firestore security rules must allow a signed-in user to read/write their own `users/{uid}` document **and** its `watchlist` and `history` subcollections.
 
 ## Git
 

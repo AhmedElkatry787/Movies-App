@@ -21,6 +21,17 @@ class MoviesRepositoryImpl implements MoviesRepository {
   }
 
   @override
+  Future<List<MovieEntity>> searchMovies(String query) async {
+    try {
+      return await remoteDataSource.searchMovies(query);
+    } on DioException catch (e) {
+      throw ServerException(_mapDioError(e));
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
   Future<MovieDetailsEntity> getMovieDetails(int movieId) async {
     try {
       return await remoteDataSource.getMovieDetails(movieId);

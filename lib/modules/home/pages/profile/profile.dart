@@ -10,6 +10,10 @@ import '../../../../core/app_colors/app_colors.dart';
 import '../../../../core/routes/app_routes_name.dart';
 import '../../../../core/widgets/buttom_model.dart';
 import '../../../../core/widgets/movie_card.dart';
+import '../../../../history/presentation/manager/history_bloc.dart';
+import '../../../../history/presentation/manager/history_event.dart';
+import '../../../../history/presentation/manager/history_state.dart';
+import '../../../../history/presentation/manager/injection.dart';
 import '../../../../watchlist/presentation/manager/injection.dart';
 import '../../../../watchlist/presentation/manager/watchlist_bloc.dart';
 import '../../../../watchlist/presentation/manager/watchlist_event.dart';
@@ -25,6 +29,7 @@ class Profile extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => buildAuthBloc()..add(const CurrentUserRequested())),
         BlocProvider(create: (_) => buildWatchlistBloc()..add(const WatchlistSubscriptionRequested())),
+        BlocProvider(create: (_) => buildHistoryBloc()..add(const HistorySubscriptionRequested())),
       ],
       child: const _ProfileView(),
     );
@@ -96,7 +101,12 @@ class _ProfileViewState extends State<_ProfileView> {
                           ),
                           Column(
                             children: [
-                              Text("12", style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+                              BlocBuilder<HistoryBloc, HistoryState>(
+                                builder: (context, history) => Text(
+                                  '${history.count}',
+                                  style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700),
+                                ),
+                              ),
                               Text(' history ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
                             ],
                           ),
@@ -153,7 +163,7 @@ class _ProfileViewState extends State<_ProfileView> {
                 ),
               ),
                Expanded(
-                 child: _tabIndex == 0 ? _watchList() : _emptyList(),
+                 child: _tabIndex == 0 ? _watchList() : _historyList(),
                ),
             ],
           );
@@ -181,6 +191,29 @@ class _ProfileViewState extends State<_ProfileView> {
             childAspectRatio: 0.68,
           ),
           itemBuilder: (context, index) => MovieCard(movie: watchlist.movies[index]),
+        );
+      },
+    );
+  }
+
+  Widget _historyList() {
+    return BlocBuilder<HistoryBloc, HistoryState>(
+      builder: (context, history) {
+        if (history.isLoading) {
+          return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
+        }
+        if (history.movies.isEmpty) return _emptyList();
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: history.movies.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 0.68,
+          ),
+          itemBuilder: (context, index) => MovieCard(movie: history.movies[index]),
         );
       },
     );

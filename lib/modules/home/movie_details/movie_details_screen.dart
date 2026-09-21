@@ -8,6 +8,11 @@ import 'package:movies_app/modules/home/movie_details/wedgets/details_screenshot
 import 'package:movies_app/modules/home/movie_details/wedgets/details_similar.dart';
 import 'package:movies_app/modules/home/movie_details/wedgets/details_summary.dart';
 import '../../../../core/app_colors/app_colors.dart';
+import '../../../../history/presentation/manager/history_bloc.dart';
+import '../../../../history/presentation/manager/history_event.dart';
+import '../../../../history/presentation/manager/injection.dart';
+import '../../../../movies/domain/entities/movie_details_entity.dart';
+import '../../../../movies/domain/entities/movie_entity.dart';
 import '../../../../movies/presentation/manager/injection.dart';
 import '../../../../movies/presentation/manager/movie_details_bloc.dart';
 import '../../../../movies/presentation/manager/movie_details_event.dart';
@@ -25,6 +30,7 @@ class MovieDetailsScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => buildMovieDetailsBloc()..add(MovieDetailsRequested(movieId))),
         BlocProvider(create: (_) => buildWatchlistBloc()..add(const WatchlistSubscriptionRequested())),
+        BlocProvider(create: (_) => buildHistoryBloc()),
       ],
       child: _MovieDetailsView(),
     );
@@ -33,6 +39,21 @@ class MovieDetailsScreen extends StatelessWidget {
 
 class _MovieDetailsView extends StatelessWidget {
   const _MovieDetailsView();
+
+  // Opening the details screen is what counts as watching a movie here.
+  void _recordInHistory(BuildContext context, MovieDetailsEntity movie) {
+    context.read<HistoryBloc>().add(HistoryRecorded(
+          MovieEntity(
+            id: movie.id,
+            title: movie.title,
+            year: movie.year,
+            rating: movie.rating,
+            genres: movie.genres,
+            posterUrl: movie.posterUrl,
+            summary: movie.summary,
+          ),
+        ));
+  }
 
   Widget _sectionTitle(String title) {
     return Padding(
@@ -48,7 +69,10 @@ class _MovieDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
-      body: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+      body: BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
+        listenWhen: (previous, current) => current is MovieDetailsLoaded,
+        listener: (context, state) =>
+            _recordInHistory(context, (state as MovieDetailsLoaded).movie),
         builder: (context, state) {
           if (state is MovieDetailsLoading || state is MovieDetailsInitial) {
             return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
