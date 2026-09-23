@@ -49,20 +49,25 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.darkGrey,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: AppColors.yellow, size: 26),
-          const SizedBox(width: 12),
-          Text(
-            value,
-            style: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ],
+      // Large like counts shrink to fit on narrow phones instead of overflowing.
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: AppColors.yellow, size: 26),
+            const SizedBox(width: 12),
+            Text(
+              value,
+              style: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }

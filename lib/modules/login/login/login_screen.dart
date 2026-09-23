@@ -5,6 +5,7 @@ import '../../../auth/presentation/manager/auth_bloc.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
+import '../../../core/responsive/responsive.dart';
 import '../../../core/widgets/buttom_model.dart';
 import '../../../core/widgets/lang_selector.dart';
 import '../../../auth/presentation/manager/auth_event.dart';
@@ -58,13 +59,14 @@ class _LoginViewState extends State<_LoginView> {
       child: Scaffold(
         backgroundColor: AppColors.darkBackground,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+          // Scrolls so short screens and the open keyboard don't overflow it.
+          child: SingleChildScrollView(
+            padding: context.contentPadding(horizontal: 20, vertical: 20),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/splashimg.png', width: 200, height: 200),
+                  Image.asset('assets/images/splashimg.png', width: context.scaled(200), height: context.scaled(200)),
                   const SizedBox(height: 70),
                   CustomTextFormField(
                     controller: _emailController,

@@ -113,8 +113,9 @@ class _SearchViewState extends State<_SearchView> {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       itemCount: state.movies.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      // Two columns on phones, more as the screen gets wider.
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 240,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         childAspectRatio: 189 / 279,

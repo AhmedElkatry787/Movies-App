@@ -102,8 +102,8 @@ class _BrowseViewState extends State<_BrowseView> {
                   child: GridView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: filteredMovies.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 240,
                       mainAxisSpacing: 14,
                       crossAxisSpacing: 14,
                       childAspectRatio: 0.62,

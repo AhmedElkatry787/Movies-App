@@ -6,6 +6,7 @@ import '../../../../../auth/presentation/manager/auth_event.dart';
 import '../../../../../auth/presentation/manager/auth_state.dart';
 import '../../../../../auth/presentation/manager/injection.dart';
 import '../../../../../core/app_colors/app_colors.dart';
+import '../../../../../core/responsive/responsive.dart';
 import '../../../../../core/routes/app_routes_name.dart';
 import '../../../../../core/widgets/buttom_model.dart';
 import '../../../../../core/widgets/textfromfield_model.dart';
@@ -211,11 +212,13 @@ class _EditProfileViewState extends State<_EditProfileView> {
           body: SafeArea(
             child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+              // The buttons sit at the bottom when there's room, and scroll
+              // after the fields when there isn't (landscape, open keyboard).
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: context.contentPadding(horizontal: 16),
+                    sliver: SliverToBoxAdapter(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -278,32 +281,39 @@ class _EditProfileViewState extends State<_EditProfileView> {
                     ),
                   ),
                   if (!_isGridOpen)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Column(
-                        children: [
-                          CustomButton(
-                            text: 'Delete Account',
-                            onPressed: _isSaving ? null : _confirmDelete,
-                            backgroundColor: AppColors.red,
-                            textColor: AppColors.white,
-                            disabledBackgroundColor: AppColors.red,
-                            disabledTextColor: AppColors.white,
-                            height: 56,
-                            borderRadius: 15,
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: context.contentPadding(horizontal: 16).copyWith(bottom: 16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomButton(
+                                text: 'Delete Account',
+                                onPressed: _isSaving ? null : _confirmDelete,
+                                backgroundColor: AppColors.red,
+                                textColor: AppColors.white,
+                                disabledBackgroundColor: AppColors.red,
+                                disabledTextColor: AppColors.white,
+                                height: 56,
+                                borderRadius: 15,
+                              ),
+                              SizedBox(height: 19),
+                              CustomButton(
+                                text: _isSaving ? 'Updating...' : 'Update Data',
+                                onPressed: _hasChanges && !_isSaving ? _submit : null,
+                                backgroundColor: AppColors.yellow,
+                                textColor: AppColors.darkBackground,
+                                disabledBackgroundColor: AppColors.yellow,
+                                disabledTextColor: AppColors.darkBackground,
+                                height: 56,
+                                borderRadius: 15,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 19),
-                          CustomButton(
-                            text: _isSaving ? 'Updating...' : 'Update Data',
-                            onPressed: _hasChanges && !_isSaving ? _submit : null,
-                            backgroundColor: AppColors.yellow,
-                            textColor: AppColors.darkBackground,
-                            disabledBackgroundColor: AppColors.yellow,
-                            disabledTextColor: AppColors.darkBackground,
-                            height: 56,
-                            borderRadius: 15,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                 ],

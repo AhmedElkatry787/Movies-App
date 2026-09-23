@@ -5,6 +5,7 @@ import '../../../auth/presentation/manager/auth_event.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
+import '../../../core/responsive/responsive.dart';
 import '../../../core/widgets/buttom_model.dart';
 import '../../../core/widgets/textfromfield_model.dart';
 
@@ -62,10 +63,10 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(18.0),
+          padding: context.contentPadding(horizontal: 18, vertical: 18),
           child: Column(
             children: [
-              Image.asset('assets/images/Forgotpassword.png', width: 380, height: 380),
+              Image.asset('assets/images/Forgotpassword.png', width: context.scaled(380), height: context.scaled(380)),
               const SizedBox(height: 24),
               CustomTextFormField(
                 controller: _emailController,

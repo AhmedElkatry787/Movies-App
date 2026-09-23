@@ -55,6 +55,7 @@ Note the typos baked into paths — `wedgets/`, `wigets/`, `seacrh/serach.dart`,
 - Colors come from `AppColors` (`lib/core/app_colors/app_colors.dart`) — dark background `#121312`, dark grey `#282A28`, yellow `#FFBB3B`, red `#E82626`.
 - Blocs are event-driven (`on<Event>`) and states are `Equatable`; states are separate subclasses (`XLoading`, `XLoaded`, `XError`), except `WatchlistState` and `HistoryState`, the stream-backed ones, which are single classes with `copyWith`.
 - Designs are measured from a 430px-wide frame; translate sizes to ratios (for example the Similar grid uses `childAspectRatio: 189 / 279` with a 20px gap) rather than hardcoding pixel widths.
+- Every screen must be responsive (the assignment grades it). `lib/core/responsive/responsive.dart` has `context.scaled(designSize)`, which scales a 430-frame size to the device's shortest side and stops growing at 500px, and `context.contentPadding(...)`, which keeps forms phone-width and centered on tablets and in landscape. Movie grids use `SliverGridDelegateWithMaxCrossAxisExtent` so they gain columns on wider screens, and screens that could outgrow a short or landscape screen scroll instead of using fixed heights.
 - Firestore security rules must allow a signed-in user to read/write their own `users/{uid}` document **and** its `watchlist` and `history` subcollections.
 
 ## Git

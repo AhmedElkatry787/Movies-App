@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/modules/home/pages/home/widgets/category_section.dart';
 import 'package:movies_app/modules/home/pages/home/widgets/hero_carousel.dart';
 import '../../../../core/app_colors/app_colors.dart';
+import '../../../../core/responsive/responsive.dart';
 import '../../../../movies/domain/entities/movie_entity.dart';
 import '../../../../movies/presentation/manager/injection.dart';
 import '../../../../movies/presentation/manager/movies_bloc.dart';
@@ -107,7 +108,7 @@ class _HomeViewState extends State<_HomeView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 7),
-                      Center(child: Image.asset('assets/images/Available Now.png', height: 90)),
+                      Center(child: Image.asset('assets/images/Available Now.png', height: context.scaled(90))),
                       const SizedBox(height: 21),
                       if (heroMovies.isNotEmpty)
                         HeroCarousel(
@@ -115,7 +116,7 @@ class _HomeViewState extends State<_HomeView> {
                           onPageChanged: (page) => setState(() => _currentPage = page),
                         ),
                       const SizedBox(height: 21),
-                      Center(child: Image.asset('assets/images/Watch Now.png', height: 150)),
+                      Center(child: Image.asset('assets/images/Watch Now.png', height: context.scaled(150))),
                       const SizedBox(height: 7),
                       for (final genre in genres)
                         CategorySection(

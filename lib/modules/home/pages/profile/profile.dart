@@ -7,6 +7,7 @@ import '../../../../auth/presentation/manager/auth_event.dart';
 import '../../../../auth/presentation/manager/auth_state.dart';
 import '../../../../auth/presentation/manager/injection.dart';
 import '../../../../core/app_colors/app_colors.dart';
+import '../../../../core/responsive/responsive.dart';
 import '../../../../core/routes/app_routes_name.dart';
 import '../../../../core/widgets/buttom_model.dart';
 import '../../../../core/widgets/movie_card.dart';
@@ -14,6 +15,7 @@ import '../../../../history/presentation/manager/history_bloc.dart';
 import '../../../../history/presentation/manager/history_event.dart';
 import '../../../../history/presentation/manager/history_state.dart';
 import '../../../../history/presentation/manager/injection.dart';
+import '../../../../movies/domain/entities/movie_entity.dart';
 import '../../../../watchlist/presentation/manager/injection.dart';
 import '../../../../watchlist/presentation/manager/watchlist_bloc.dart';
 import '../../../../watchlist/presentation/manager/watchlist_event.dart';
@@ -66,105 +68,12 @@ class _ProfileViewState extends State<_ProfileView> {
             return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
           }
 
-          final user = state.user;
-          final avatarPath = 'assets/images/p${(user.avatarIndex ?? 0) + 1}.png';
-
-          return Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.darkGrey,
-                ),
-                child: Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 52),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                              radius: 70,
-                              backgroundImage: AssetImage(avatarPath)
-                          ),
-                          Column(
-                            children: [
-                              BlocBuilder<WatchlistBloc, WatchlistState>(
-                                builder: (context, watchlist) => Text(
-                                  '${watchlist.count}',
-                                  style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              Text('Wish list ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              BlocBuilder<HistoryBloc, HistoryState>(
-                                builder: (context, history) => Text(
-                                  '${history.count}',
-                                  style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              Text(' history ', style: const TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700)),
-                            ],
-                          ),
-
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                          user.name,
-                          style:TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20, fontWeight: FontWeight.w700
-                          ),
-                        textAlign: TextAlign.start,
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            text: 'Edit Profile',
-                            onPressed: () => _openEditProfile(user),
-                            backgroundColor: AppColors.yellow,
-                            textColor: AppColors.darkGrey,
-                            height: 56,
-                            borderRadius: 15,
-                            width: 255,
-                          ),
-                           SizedBox(width: 10),
-                          CustomButton(
-                            text: 'ُExit',
-                            icon: Icons.logout,
-                            onPressed: () {
-                              context.read<AuthBloc>().add(const LogoutRequested());
-                              },
-                            backgroundColor: AppColors.red,
-                            textColor: AppColors.darkGrey,
-                            height: 56,
-                            borderRadius: 15,
-                            width: 135,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: _tabButton('Watch List', 0,'assets/icons/watchlist.svg')),
-                          Expanded(child: _tabButton('History', 1,'assets/icons/Folder.svg')),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-               Expanded(
-                 child: _tabIndex == 0 ? _watchList() : _historyList(),
-               ),
+          // The header scrolls away with the grid, so short and landscape
+          // screens still have room left for the movies.
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _header(state.user)),
+              _tabIndex == 0 ? _watchList() : _historyList(),
             ],
           );
         },
@@ -172,26 +81,113 @@ class _ProfileViewState extends State<_ProfileView> {
     );
   }
 
+  Widget _header(UserEntity user) {
+    final avatarPath = 'assets/images/p${(user.avatarIndex ?? 0) + 1}.png';
+
+    return Container(
+      color: AppColors.darkGrey,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 28),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: context.scaled(70),
+                  backgroundImage: AssetImage(avatarPath),
+                ),
+                Expanded(
+                  child: BlocBuilder<WatchlistBloc, WatchlistState>(
+                    builder: (context, watchlist) => _stat(watchlist.count, 'Wish list'),
+                  ),
+                ),
+                Expanded(
+                  child: BlocBuilder<HistoryBloc, HistoryState>(
+                    builder: (context, history) => _stat(history.count, 'history'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Text(
+              user.name,
+              style: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w700),
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 16),
+            // The two buttons keep the design's 255:135 split at any width.
+            Row(
+              children: [
+                Expanded(
+                  flex: 255,
+                  child: CustomButton(
+                    text: 'Edit Profile',
+                    onPressed: () => _openEditProfile(user),
+                    backgroundColor: AppColors.yellow,
+                    textColor: AppColors.darkGrey,
+                    height: 56,
+                    borderRadius: 15,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 135,
+                  child: CustomButton(
+                    text: 'Exit',
+                    icon: Icons.logout,
+                    onPressed: () {
+                      context.read<AuthBloc>().add(const LogoutRequested());
+                    },
+                    backgroundColor: AppColors.red,
+                    textColor: AppColors.darkGrey,
+                    height: 56,
+                    borderRadius: 15,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Bottom-aligned so the labels line up even though the icons differ in height.
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(child: _tabButton('Watch List', 0, 'assets/icons/watchlist.svg')),
+                Expanded(child: _tabButton('History', 1, 'assets/icons/Folder.svg')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Scales down instead of overflowing next to the avatar on narrow phones.
+  Widget _stat(int count, String label) {
+    const style = TextStyle(color: AppColors.white, fontSize: 24, fontWeight: FontWeight.w700);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          children: [
+            Text('$count', style: style),
+            Text(label, style: style),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _watchList() {
     return BlocBuilder<WatchlistBloc, WatchlistState>(
       builder: (context, watchlist) {
-        if (watchlist.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
-        }
+        if (watchlist.isLoading) return _loading();
         if (watchlist.movies.isEmpty) return _emptyList();
-
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: watchlist.movies.length,
-          gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 0.68,
-          ),
-          itemBuilder: (context, index) => MovieCard(movie: watchlist.movies[index]),
-        );
+        return _moviesGrid(watchlist.movies);
       },
     );
   }
@@ -199,32 +195,45 @@ class _ProfileViewState extends State<_ProfileView> {
   Widget _historyList() {
     return BlocBuilder<HistoryBloc, HistoryState>(
       builder: (context, history) {
-        if (history.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.yellow));
-        }
+        if (history.isLoading) return _loading();
         if (history.movies.isEmpty) return _emptyList();
-
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: history.movies.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 0.68,
-          ),
-          itemBuilder: (context, index) => MovieCard(movie: history.movies[index]),
-        );
+        return _moviesGrid(history.movies);
       },
     );
   }
 
+  Widget _moviesGrid(List<MovieEntity> movies) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(16),
+      sliver: SliverGrid.builder(
+        itemCount: movies.length,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 240,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          childAspectRatio: 189 / 279,
+        ),
+        itemBuilder: (context, index) => MovieCard(movie: movies[index]),
+      ),
+    );
+  }
+
+  Widget _loading() {
+    return const SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(child: CircularProgressIndicator(color: AppColors.yellow)),
+    );
+  }
+
   Widget _emptyList() {
-    return Center(
-      child: Image.asset(
-        'assets/images/Empty 1.png',
-        width: 120,
-        height: 120,
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Image.asset(
+          'assets/images/Empty 1.png',
+          width: 120,
+          height: 120,
+        ),
       ),
     );
   }
@@ -241,18 +250,19 @@ class _ProfileViewState extends State<_ProfileView> {
     bloc.add(const CurrentUserRequested());
   }
 
-  Widget _tabButton(String label, int index,String iconPath) {
+  Widget _tabButton(String label, int index, String iconPath) {
     final isSelected = _tabIndex == index;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => setState(() => _tabIndex = index),
       child: Column(
         children: [
           SvgPicture.asset(iconPath),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(color : AppColors.white, fontSize: 20, fontWeight: FontWeight.w400)),
+          Text(label, style: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w400)),
           const SizedBox(height: 24),
-          if (isSelected) Container(height: 2, width: 250, color: AppColors.yellow),
+          Container(height: 2, color: isSelected ? AppColors.yellow : Colors.transparent),
         ],
       ),
     );

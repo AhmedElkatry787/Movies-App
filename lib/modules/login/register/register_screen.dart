@@ -6,6 +6,7 @@ import '../../../auth/presentation/manager/auth_event.dart';
 import '../../../auth/presentation/manager/auth_state.dart';
 import '../../../auth/presentation/manager/injection.dart';
 import '../../../core/app_colors/app_colors.dart';
+import '../../../core/responsive/responsive.dart';
 import '../../../core/routes/app_routes_name.dart';
 import '../../../core/widgets/buttom_model.dart';
 import '../../../core/widgets/lang_selector.dart';
@@ -98,7 +99,7 @@ class _RegisterViewState extends State<_RegisterView> {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(18.0),
+          padding: context.contentPadding(horizontal: 18, vertical: 18),
           child: Column(
             children: [
               AvatarSelector(onAvatarSelected: (index) => setState(() => _avatarIndex = index)),

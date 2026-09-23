@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/responsive/responsive.dart';
 
 class AvatarSelector extends StatefulWidget {
   final Function(int index) onAvatarSelected;
@@ -31,9 +32,9 @@ class _AvatarSelectorState extends State<AvatarSelector> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _avatarCircle(index: leftIndex, size: 95, onTap: () => _select(leftIndex)),
-            _avatarCircle(index: centerIndex, size: 150, isSelected: true, onTap: () {}),
-            _avatarCircle(index: rightIndex, size: 95, onTap: () => _select(rightIndex)),
+            _avatarCircle(index: leftIndex, size: context.scaled(95), onTap: () => _select(leftIndex)),
+            _avatarCircle(index: centerIndex, size: context.scaled(150), isSelected: true, onTap: () {}),
+            _avatarCircle(index: rightIndex, size: context.scaled(95), onTap: () => _select(rightIndex)),
           ],
         ),
         const SizedBox(height: 10),

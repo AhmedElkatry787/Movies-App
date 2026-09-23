@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_colors/app_colors.dart';
+import '../../../core/responsive/responsive.dart';
 import '../../../core/widgets/buttom_model.dart';
 import 'onboarding_model.dart';
 
@@ -23,17 +24,22 @@ class OnBoardingBottomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(
-        minHeight: MediaQuery.sizeOf(context).height * kCardHeightFactor,
+        minHeight: screenHeight * kCardHeightFactor,
+        // On short screens (landscape) the card scrolls instead of running
+        // off the top of the screen.
+        maxHeight: screenHeight * 0.9,
       ),
       decoration: const BoxDecoration(
         color: AppColors.darkBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 34, 16, 20),
+      child: SingleChildScrollView(
+        padding: context.contentPadding(horizontal: 16).copyWith(top: 34, bottom: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

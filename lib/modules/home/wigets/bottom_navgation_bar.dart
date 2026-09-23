@@ -22,7 +22,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
     ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 9),
+      // Also clears the system navigation bar / home indicator and landscape notches.
+      margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 9) +
+          MediaQuery.paddingOf(context).copyWith(top: 0),
       height: 61,
       decoration: BoxDecoration(
         color: AppColors.darkGrey,

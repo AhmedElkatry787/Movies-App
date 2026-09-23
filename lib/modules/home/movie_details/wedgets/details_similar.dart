@@ -16,8 +16,9 @@ class DetailsSimilar extends StatelessWidget {
       physics:  NeverScrollableScrollPhysics(),
       padding:  EdgeInsets.symmetric(horizontal: 16),
       itemCount: movies.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      // Two columns on phones, more as the screen gets wider.
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 240,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         childAspectRatio: 189 / 279,

@@ -27,9 +27,10 @@ class _CastRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Grows past the design's 90px when a long name wraps on a narrow screen.
     return Container(
       width: double.infinity,
-      height: 90,
+      constraints: const BoxConstraints(minHeight: 90),
       margin:  EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -37,6 +38,7 @@ class _CastRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 70,

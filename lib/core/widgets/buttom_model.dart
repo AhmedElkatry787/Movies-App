@@ -100,34 +100,38 @@ class CustomButton extends StatelessWidget {
           ),
         ),
 
+        // On a narrow button the label shrinks to fit instead of overflowing.
         child: child ??
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (buttonIcon != null && !iconAfterText) ...[
-                  buttonIcon,
-                  SizedBox(width: iconSpacing),
-                ],
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (buttonIcon != null && !iconAfterText) ...[
+                    buttonIcon,
+                    SizedBox(width: iconSpacing),
+                  ],
 
-                Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                    color: effectiveTextColor,
-                    letterSpacing: 0,
-                    height: 1.0,
+                  Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: fontSize,
+                      fontWeight: fontWeight,
+                      color: effectiveTextColor,
+                      letterSpacing: 0,
+                      height: 1.0,
+                    ),
                   ),
-                ),
 
-                if (buttonIcon != null && iconAfterText) ...[
-                  SizedBox(width: iconSpacing),
-                  buttonIcon,
+                  if (buttonIcon != null && iconAfterText) ...[
+                    SizedBox(width: iconSpacing),
+                    buttonIcon,
+                  ],
                 ],
-              ],
+              ),
             ),
       ),
     );

@@ -1,6 +1,8 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/app_colors/app_colors.dart';
+import '../../../../../core/responsive/responsive.dart';
 import '../../../../../movies/domain/entities/movie_details_entity.dart';
 import '../../../../../movies/domain/entities/movie_entity.dart';
 import '../../../../../watchlist/presentation/manager/watchlist_bloc.dart';
@@ -15,7 +17,9 @@ class DetailsBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageUrl = movie.posterUrl.isNotEmpty ? movie.posterUrl : movie.backdropUrl;
-    final height = MediaQuery.of(context).size.width * 1.45;
+    final screen = MediaQuery.sizeOf(context);
+    // Capped so tablets and landscape phones still see the page below it.
+    final height = math.min(screen.width * 1.45, screen.height * 0.75);
 
     return SizedBox(
       height: height,
@@ -138,10 +142,12 @@ class _PlayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = context.scaled(100);
+
     return Container(
-      width: 100,
-      height: 100,
-      padding: const EdgeInsets.all(6),
+      width: size,
+      height: size,
+      padding: EdgeInsets.all(size * 0.06),
       decoration: BoxDecoration(
         color: AppColors.white,
         shape: BoxShape.circle,
@@ -151,10 +157,10 @@ class _PlayButton extends StatelessWidget {
         decoration: const BoxDecoration(color: AppColors.yellow, shape: BoxShape.circle),
         alignment: Alignment.center,
         child: Container(
-          width: 48,
-          height: 48,
+          width: size * 0.48,
+          height: size * 0.48,
           decoration: const BoxDecoration(color: AppColors.white, shape: BoxShape.circle),
-          child: const Icon(Icons.play_arrow_rounded, color: AppColors.yellow, size: 40),
+          child: Icon(Icons.play_arrow_rounded, color: AppColors.yellow, size: size * 0.4),
         ),
       ),
     );

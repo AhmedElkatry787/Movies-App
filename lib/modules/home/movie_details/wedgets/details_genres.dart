@@ -15,7 +15,6 @@ class DetailsGenres extends StatelessWidget {
         runSpacing: 8,
         children: genres.map((genre) {
           return Container(
-            height: 36,
             padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: AppColors.darkGrey,
