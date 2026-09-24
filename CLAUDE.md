@@ -60,4 +60,4 @@ Note the typos baked into paths — `wedgets/`, `wigets/`, `seacrh/serach.dart`,
 
 ## Git
 
-Work happens on `task<N>` branches (`task1`, `task2`, `task3`, …) branched from `master`, one per task; the current one is `task3`. Commit messages are lowercase imperative summaries, e.g. "add movie details screen with BLoC state management and UI components".
+Work happens on `task<N>` branches, one per task, each branched from the previous one (`task1` from `master`). The current one is `task4` (Search, Browse and Profile tabs); `task3` stops at the movie details screen and its suggestions, so don't add new work there. Commit messages are lowercase imperative summaries, e.g. "add movie details screen with BLoC state management and UI components".
